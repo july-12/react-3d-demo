@@ -167,14 +167,7 @@ export class Graph3DApp {
     }
 
     setLights() {
-        const intensity = 1;
-        this.scene.add(new THREE.AmbientLight(0xf9f9f9, intensity));
-        // const dirLight = new THREE.DirectionalLight(0xfafafa, intensity);
-        // dirLight.position.set(30, 50, 10);
-        // this.scene.add(dirLight);
-        // const spotLight = new THREE.SpotLight(0xfefefe, 10);
-        // spotLight.position.set(0, 200, 1);
-        // this.scene.add(spotLight);
+        this.scene.add(new THREE.AmbientLight(0x222222));
     }
 
     setControl() {
@@ -260,7 +253,9 @@ export class Graph3DApp {
             const segments = 32;
             const geo = new THREE.SphereBufferGeometry(planet.radius, segments, segments);
             // const geo = new THREE.BoxGeometry(10, 10, 10);
-            let materialProps: THREE.MeshBasicMaterialParameters = {};
+            let materialProps: THREE.MeshPhongMaterialParameters = {
+                shininess: 150
+            };
             if (planet.texture) {
                 const loader = new THREE.TextureLoader();
                 const texture = loader.load(planet.texture);
@@ -272,7 +267,7 @@ export class Graph3DApp {
                 materialProps.color = planet.color;
             }
 
-            const mat = new THREE.MeshBasicMaterial(materialProps);
+            const mat = new THREE.MeshPhongMaterial(materialProps);
             return new THREE.Mesh(geo, mat);
         }
 
@@ -310,7 +305,30 @@ export class Graph3DApp {
             return planetObj;
         }
 
-        _this.sun = createPlanet(sun, 0);
+        function createSun(planet: planetProps) {
+            const intensity = 1.1;
+            const light = new THREE.PointLight(planet.color, intensity);
+            light.castShadow = true;
+
+            const segments = 32;
+            const geo = new THREE.SphereBufferGeometry(planet.radius, segments, segments);
+
+            const loader = new THREE.TextureLoader();
+            const texture = loader.load(planet.texture as string);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+
+            const mat = new THREE.MeshBasicMaterial({
+                map: texture
+            });
+            mat.color.multiplyScalar(intensity);
+            const sunMesh = new THREE.Mesh(geo, mat);
+            light.add(sunMesh);
+
+            return light;
+        }
+
+        _this.sun = createSun(sun);
         _this.scene.add(_this.sun);
 
         let distance = 60;
