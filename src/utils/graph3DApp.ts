@@ -118,52 +118,13 @@ export class Graph3DApp {
     }
 
     setCamera() {
-        if (false) {
-            const left = -window.innerWidth / 2;
-            const right = -left;
-            const top = -window.innerHeight / 2;
-            const bottom = -top;
-            const near = 1;
-            const far = 1000;
-            const camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
-            camera.position.set(5, 55, 105);
-            return camera;
-        } else {
-            const fov: number = 75;
-            const aspect: number = window.innerWidth / window.innerHeight;
-            const near: number = 0.1;
-            const far: number = 10000;
-            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-            camera.position.set(5, 855, 405);
-            return camera;
-        }
-    }
-
-    renderNodes() {
-        let nodeLength = 30;
-        const maxNodeRadius = 20;
-        const minNodeRadius = 2;
-        const nodeContainer = new THREE.Object3D();
-        this.scene.add(nodeContainer);
-        let nodes = [];
-
-        const nodeInstance = 10;
-        let currentBorder = 0;
-        function createNode(index: number) {
-            const radius = randomInRange(minNodeRadius, maxNodeRadius);
-            const segments = 32;
-            const geo = new THREE.SphereBufferGeometry(radius, segments, segments);
-            const mat = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-            const mesh = new THREE.Mesh(geo, mat);
-            const x = currentBorder + radius;
-            mesh.position.x = x;
-            currentBorder = x + radius + nodeInstance;
-            nodeContainer.add(mesh);
-            return mesh;
-        }
-        for (let i = 0; i < nodeLength; i++) {
-            nodes.push(createNode(i));
-        }
+        const fov: number = 75;
+        const aspect: number = window.innerWidth / window.innerHeight;
+        const near: number = 0.1;
+        const far: number = 10000;
+        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        camera.position.set(5, 855, 405);
+        return camera;
     }
 
     setLights() {
