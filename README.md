@@ -4,7 +4,7 @@ Use Basic Skills of [THREE.JS](http://www.webgl3d.cn/threejs/docs/index.html) to
 
 It is really there are a lot of things to learn in order to build fantastic & interesting 3D scene.
 
-[!test](https://user-images.githubusercontent.com/920487/102460457-f62c7680-4081-11eb-8978-56c242cec457.png)
+![galaxy-bg](https://user-images.githubusercontent.com/920487/102460457-f62c7680-4081-11eb-8978-56c242cec457.png)
 
 ###  Usage
 
