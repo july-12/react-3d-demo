@@ -267,7 +267,7 @@ export class Graph3DApp {
         }
 
         function createSun(planet: planetProps) {
-            const intensity = 1.1;
+            const intensity = 1.4;
             const light = new THREE.PointLight(planet.color, intensity);
             light.castShadow = true;
 
@@ -285,6 +285,44 @@ export class Graph3DApp {
             mat.color.multiplyScalar(intensity);
             const sunMesh = new THREE.Mesh(geo, mat);
             light.add(sunMesh);
+
+            const customMat = new THREE.ShaderMaterial({
+                uniforms: {
+                    c: { value: 0.2 },
+                    p: { value: 1.42 },
+                    glowColor: { value: new THREE.Color(0xffff00) },
+                    viewVector: { value: _this.camera.position }
+                },
+                vertexShader: `
+                    uniform vec3 viewVector;
+                    uniform float c;
+                    uniform float p;
+                    varying float intensity;
+                    void main()
+                    {
+                        vec3 vNormal = normalize( normalMatrix * normal );
+                        vec3 vNormel = normalize( normalMatrix * viewVector );
+                        intensity = pow( c - dot(vNormal, vNormel), p );
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                    }
+                `,
+                fragmentShader: `
+                    uniform vec3 glowColor;
+                    varying float intensity;
+                    void main()
+                    {
+                        vec3 glow = glowColor * intensity;
+                        gl_FragColor = vec4( glow, 1.0 );
+                    }
+                `,
+                side: THREE.FrontSide,
+                blending: THREE.AdditiveBlending,
+                transparent: true
+            });
+            const sunGlow = new THREE.Mesh(geo.clone(), customMat);
+            sunGlow.scale.multiplyScalar(1.19);
+            sunGlow.position.set(light.position.x, light.position.y, light.position.z);
+            _this.scene.add(sunGlow);
 
             return light;
         }
