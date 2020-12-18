@@ -288,8 +288,8 @@ export class Graph3DApp {
 
             const customMat = new THREE.ShaderMaterial({
                 uniforms: {
-                    c: { value: 0.2 },
-                    p: { value: 1.42 },
+                    c: { value: 0.3 },
+                    p: { value: 2.82 },
                     glowColor: { value: new THREE.Color(0xffff00) },
                     viewVector: { value: _this.camera.position }
                 },
@@ -320,7 +320,7 @@ export class Graph3DApp {
                 transparent: true
             });
             const sunGlow = new THREE.Mesh(geo.clone(), customMat);
-            sunGlow.scale.multiplyScalar(1.19);
+            sunGlow.scale.multiplyScalar(2.19);
             sunGlow.position.set(light.position.x, light.position.y, light.position.z);
             _this.scene.add(sunGlow);
 
@@ -332,7 +332,7 @@ export class Graph3DApp {
 
         let distance = 60;
         let offset = sun.radius;
-        planets.forEach((planet, index) => {
+        planets.forEach((planet) => {
             offset += planet.radius * 2 + distance;
             const planetMesh = createPlanet(planet, offset);
             this.planetList.push(planetMesh);
